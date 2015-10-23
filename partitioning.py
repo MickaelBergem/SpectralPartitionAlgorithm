@@ -126,7 +126,8 @@ if __name__ == '__main__':
 
     parser.add_argument('--nodes-file', '-f', help='the file containing the nodes',
                         default='demo_nodes.txt')
-    parser.add_argument('--output-file', '-o', help='the PNG file of the graph',
+    parser.add_argument('--output-file', '-o', help='the filename of the'
+                        ' communities PNG graph to be written',
                         default='partition.png')
 
     args = parser.parse_args()
