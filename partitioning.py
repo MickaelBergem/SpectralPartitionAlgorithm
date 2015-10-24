@@ -97,12 +97,8 @@ def algorithm(nodes_file):
 
     logging.info("Found eigenvalues: ", eigenvalues)
 
-    # We want the lowest non-zero eigenvalue
-    eigenvalues = eigenvalues.tolist()
-    nzev = [ev for ev in eigenvalues if abs(ev) > 1e-15]
-
-    # Index of the first non-zero eigenvalue
-    index_fnzev = eigenvalues.index(min(nzev))
+    # Index of the second eigenvalue
+    index_fnzev = np.argsort(eigenvalues)[1]
 
     logging.debug("Eigenvector for #{} eigenvalue ({}): ".format(
         index_fnzev, eigenvalues[index_fnzev]), eigenvectors[:, index_fnzev])
