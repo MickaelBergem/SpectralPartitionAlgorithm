@@ -106,7 +106,12 @@ def algorithm(nodes_file):
     # Partition on the sign of the eigenvector's coordinates
     partition = [val >= 0 for val in eigenvectors[:, index_fnzev]]
 
-    logging.warning("Partition computed.")
+    logging.warning("Partition computed: nbA={} nbB={} (total {})".format(
+        len([val for val in partition if val]),
+        len([val for val in partition if not val]),
+        number_nodes,
+    ))
+
     return number_nodes, edges, partition
 
 
@@ -123,8 +128,7 @@ if __name__ == '__main__':
     parser.add_argument('--nodes-file', '-f', help='the file containing the nodes',
                         default='demo_nodes.txt')
     parser.add_argument('--output-file', '-o', help='the filename of the'
-                        ' communities PNG graph to be written',
-                        default='partition.png')
+                        ' communities PNG graph to be written')
 
     args = parser.parse_args()
 
@@ -133,5 +137,6 @@ if __name__ == '__main__':
 
     logging.info("Partition: ", partition)
 
-    # Print the graph
-    print_graph(number_nodes, edges, partition, outputfile=args.output_file)
+    if args.output_file:
+        # Print the graph
+        print_graph(number_nodes, edges, partition, outputfile=args.output_file)
