@@ -106,10 +106,22 @@ def algorithm(nodes_file):
     # Partition on the sign of the eigenvector's coordinates
     partition = [val >= 0 for val in eigenvectors[:, index_fnzev]]
 
-    logging.warning("Partition computed: nbA={} nbB={} (total {})".format(
-        len([val for val in partition if val]),
-        len([val for val in partition if not val]),
+    # Compute the edges in between
+    nodes_in_A = [nodeA for (nodeA, nodeCommunity) in enumerate(partition) if nodeCommunity]
+    nodes_in_B = [nodeB for (nodeB, nodeCommunity) in enumerate(partition) if not nodeCommunity]
+    edges_in_between = []
+    for edge in edges:
+        node1, node2 = edge
+        if node1 in nodes_in_A and node2 in nodes_in_B \
+                or node1 in nodes_in_B and node2 in nodes_in_A:
+            edges_in_between.append(edge)
+
+    # Display the results
+    logging.warning("Partition computed: nbA={} nbB={} (total {}), {} edges in between".format(
+        len(nodes_in_A),
+        len(nodes_in_B),
         number_nodes,
+        len(edges_in_between),
     ))
 
     return number_nodes, edges, partition
@@ -134,8 +146,6 @@ if __name__ == '__main__':
 
     # Run the algorithm
     number_nodes, edges, partition = algorithm(args.nodes_file)
-
-    logging.info("Partition: ", partition)
 
     if args.output_file:
         # Print the graph
